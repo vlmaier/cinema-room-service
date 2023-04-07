@@ -1,0 +1,1 @@
+val myEmptyArray = emptyArray<String>()
