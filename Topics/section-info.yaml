@@ -6,3 +6,4 @@ content:
 - Mutable Set
 - Arrays
 - String arrays
+- Functions as objects
