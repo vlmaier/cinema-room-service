@@ -1,0 +1,55 @@
+<h2>Set</h2>
+<div class="step-text">
+<br/>You already have a basic idea of collections, their different types (set, list, map), and variations (mutable, immutable). In this topic, we will take a closer look at one specific type, Set.<h5 id="introduction">Introduction</h5><p><code class="language-kotlin">Set</code> is an <strong>unordered</strong> collection of elements that does not allow duplicates. It is an <strong>immutable</strong> collection, which means that its size and individual elements cannot be changed after the set is initialized.</p><p>Let's assume we want to record information about the customers of a café at the end of the working day. Let's try to do it with the help of <code class="language-kotlin">MutableList</code>:</p><pre><code class="language-kotlin">val visitors = mutableListOf&lt;String&gt;("Vlad", "Vanya", "Liza")
+println(visitors) // output: [Vlad, Vanya, Liza]</code></pre><p>Is <code class="language-kotlin">MutableList</code> really the best option for the task? First of all, anyone can change its contents:</p><pre><code class="language-kotlin">visitors[2] = "Nina"
+println(visitors) // output: [Vlad, Vanya, Nina]</code></pre><p>Second, you could accidentally make a mistake and record a visitor twice:</p><pre><code class="language-kotlin">val visitors = mutableListOf&lt;String&gt;("Vlad", "Vanya", "Liza", "Vanya")
+println(visitors) // output: [Vlad, Vanya, Liza, Vanya]</code></pre><p>Set can help us to solve this problem since <code class="language-kotlin">Set</code> is <strong>immutable</strong>, and it does not allow duplicate elements:</p><pre><code class="language-kotlin">val visitors = setOf&lt;String&gt;("Vlad", "Vanya", "Liza", "Liza")
+println(visitors) // output: [Vlad, Vanya, Liza]</code></pre><p>We tried to create a <code class="language-kotlin">Set</code> with two identical elements, but since <code class="language-kotlin">Set</code> does not support duplicates, we ended up with a set of unique elements only, which is exactly what we need! And of course, <code class="language-kotlin">Set</code> is <strong>immutable</strong>, so no one will be able to mess with the contents.</p><h5 id="initialization">Initialization </h5><p><code class="language-kotlin">Set</code> is a generic type. As you saw from the previous examples, you can initialize it with the help of <code class="language-kotlin">setOf&lt;E&gt;</code>, where <code class="language-kotlin">E</code> is the type of elements contained in the set:</p><pre><code class="language-kotlin">val languages = setOf&lt;String&gt;("English", "Russian", "Italian")</code></pre><p>The type can also be derived from the context: </p><pre><code class="language-kotlin">val languages = setOf("English", "Russian", "Italian")</code></pre><p>If you need to initialize an empty set, you can use the method <code class="language-kotlin">emptySet</code>: </p><pre><code class="language-kotlin">val numbers = emptySet&lt;Int&gt;()
+println(numbers) // output: []</code></pre><p>Another way of creating a set is to call a builder function <code class="language-kotlin">buildSet()</code>:</p><pre><code class="language-kotlin">val letters = setOf&lt;Char&gt;('b', 'c')
+
+val set = buildSet&lt;Char&gt; {
+    add('a')
+    addAll(letters)
+    add('d')
+}
+println(set) // output: [a, b, c, d]</code></pre><h5 id="methods-and-properties"> Methods and properties</h5><p>Let's see how the methods you already know work in <code class="language-kotlin">Set</code>.</p><p>First, let's see how to use <code class="language-kotlin">isEmpty</code> and <code class="language-kotlin">size</code>:</p><pre><code class="language-kotlin">val visitors = setOf("Andrew", "Mike")
+
+println("How many people visited our cafe today? ${visitors.size}") // 2
+println("Was our cafe empty today? It's ${visitors.isEmpty()}") // Was our cafe empty today? It's false
+
+</code></pre><p><code class="language-kotlin">indexOf(element)</code> and <code class="language-kotlin">contains</code> work in the following way: </p><pre><code class="language-kotlin">val visitors = setOf("Paula", "Tanya", "Julia")
+
+println("Is it true that Tanya came? It's ${visitors.contains("Tanya")}") // Is it true that Tanya came? It's true
+println("And what is her index? ${visitors.indexOf("Tanya")}" ) // And her index is 1
+</code></pre><p>If you want to know who was your first or last customer of the day, that is, which element is in the first/last position, you can use the methods <code class="language-kotlin">first()</code> and <code class="language-kotlin">last()</code>. These methods are not very useful since the set is an unordered collection.</p><pre><code class="language-kotlin">val students = setOf("Bob", "Larry")
+println(students.first()) // Bob
+println(students.last()) // Larry
+</code></pre><p>Use <code class="language-kotlin">joinToString()</code> to convert a <code class="language-kotlin">Set</code> to string, for example:  </p><pre><code class="language-kotlin">val visitors = setOf("Paula", "Tanya", "Julia")
+
+val joinToString = visitors.joinToString()
+
+println(joinToString) // Paula, Tanya, Julia</code></pre><p>If you want to check that all elements from a specific collection are contained in a <code class="language-kotlin">Set</code>, use the <code class="language-kotlin">containsAll(elements)</code> method:</p><pre><code class="language-kotlin">val studentsOfAGroup = setOf("Bob", "Larry", "Vlad")
+val studentsInClass = setOf("Vlad")
+
+println("Are all the students in the group in class today? It's ${studentsInClass.containsAll(studentsOfAGroup)}") 
+// Are all the students in the group in class today? It's false
+</code></pre><p>If you want to add two sets together, simply use the "+" operator, or "-" operator if you want to subtract one from the other. Note that after adding or subtracting, you will get a new set:</p><pre><code class="language-kotlin">val productsList1 = setOf("Banana", "Lime", "Strawberry")
+val productsList2 = setOf("Strawberry")
+
+val finalProductsList1 = productsList1 + productsList2
+println(finalProductsList1) // [Banana, Lime, Strawberry]
+
+val finalProductsList2 = productsList1 - productsList2
+println(finalProductsList2) // [Banana, Lime]</code></pre><p>Got a <code class="language-kotlin">MutableList</code> and want to convert it to <code class="language-kotlin">Set</code>? Not a big deal, use <code class="language-kotlin">toSet()</code>method:</p><pre><code class="language-kotlin">val groceries = mutableListOf("Pen", "Pineapple", "Apple", "Super Pen", "Apple", "Pen")
+println(groceries.toSet()) // [Pen, Pineapple, Apple, Super Pen]</code></pre><h5 id="iterating-through-elements">Iterating through elements</h5><p>You can iterate through the elements in the <code class="language-kotlin">Set</code> with the help of the <code class="language-kotlin">for</code> loop. Let's see an example: </p><pre><code class="language-kotlin">val visitors = setOf("Vlad", "Liza", "Vanya", "Nina")
+
+for (visitor in visitors) {
+    println("Hello $visitor!")
+}
+
+// output:
+// Hello Vlad!
+// Hello Liza!
+// Hello Vanya!
+// Hello Nina!</code></pre><h5 id="conclusion">Conclusion </h5><p>Now you know what a <code class="language-kotlin">Set</code> is and how it differs from a <code class="language-kotlin">MutableList</code>. Use <code class="language-kotlin">Set</code> when you don't want the content to be changed and want to keep the unique elements only. You know how to initialize a set, check if it's empty, see if it contains a certain element, find out the index of an element, convert the set to a string, and iterate through the <code class="language-kotlin">Set</code> with the help of <code class="language-kotlin">for</code> loop.</p><p>Ready to test yourself? Let's move on to the practice problems!</p>
+</div>
