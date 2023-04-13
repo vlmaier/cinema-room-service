@@ -1,0 +1,22 @@
+type: choice
+is_multiple_choice: true
+options:
+- text: A variable can store only a string as its value.
+- text: "To declare a variable, you should write <b>var</b> or <b>val</b> before the\
+    \ name."
+- text: Variable declared with the <b>var</b> keyword can be changed multiple times
+- text: It is possible to initialize a variable with the value of another variable.
+files:
+- name: src/Main.kt
+  visible: true
+  text: |
+    // You can experiment here, it won’t be checked
+
+    fun main(args: Array<String>) {
+      // put your code here
+    }
+  learner_created: false
+feedback_link: https://hyperskill.org/learn/step/4381#comment
+status: Solved
+record: -1
+local_check: false
