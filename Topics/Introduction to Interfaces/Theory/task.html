@@ -1,0 +1,108 @@
+<h2>Introduction to Interfaces</h2>
+<div class="step-text">
+<p>Sometimes, working with classes, we have an idea of what a class is supposed to do, but we don't really need to – or can't for some reason – code the whole class at once. That's when <strong>interfaces</strong> come in handy. Let's see what they are and how they work.</p><h5 id="what-are-interfaces">What are interfaces?</h5><p>Imagine, you'd like to get a pet but can't yet decide between a cat, a dog, and, let's say, a lizard. You just want your pet to run around the house and make some sounds. Lots of pets do that, even if in their own way. So, as long as we know that they do what we want them to do, any pet will fit your definition. Same with interfaces, or contracts for the implementing classes: interfaces define what methods and properties the implementing class must have. A class might implement these methods in its own way, but as long as it does what it's supposed to do, we are fine.</p><p>We are already familiar with the concept of classes – an indispensable part of object-oriented programming. For example, if we are programming a simulation or a game where we use animals, we might need some classes that represent them:</p><pre><code class="language-kotlin">class Cat() {
+    val numberOfLimbs: Int = 4
+    fun move() {
+        run()
+    }
+
+    fun communicate() {
+        sayMeow()
+    }
+}
+
+class Parrot {
+    val numberOfLimbs: Int = 2
+    fun move() {
+        fly()
+    }
+
+    fun communicate() {
+        talk()
+    }
+}</code></pre><p>Generally speaking, if we need to implement several entities of the same category, they must have some shared properties. Like in the above example: despite the obvious difference between the animals, all of them have limbs and all of them share the abilities to move and somehow communicate.</p><p>Interfaces provide a way to make something like the skeleton of a class. We can say that for our purposes, all animals have:</p><ul><li><p>A certain number of limbs;</p></li><li><p>The ability to move;</p></li><li><p>The ability to communicate.</p></li></ul><p>Thus, our "skeleton" for a category of animals will certainly have a field for the number of legs and methods like <code class="language-kotlin">move</code> and <code class="language-kotlin">communicate</code>. This can be achieved via the usage of interfaces.</p><p>An important note: all animals are different. The bird moves differently compared to the cat: the former uses wings to fly, while the latter jumps and runs on feet. An interface doesn't need to know the specifics: it just states that if X is an animal, then it can move. The manner of moving depends on the implementation of the interface – on the class that implements that interface.</p><p>See it as a box with fixed inputs and outputs. We don't know what happens inside, but as long as we know that it's an <code class="language-kotlin">Animal</code>, it can <code class="language-kotlin">move</code>. One way or another.</p><h5 id="implementation">Implementation</h5><p>In Kotlin, interfaces are defined similarly to classes, only without constructors – interfaces cannot store states.</p><p>It means that we can't create an instance of an interface, but we can create an instance of the class implementing that interface.</p><pre><code class="language-kotlin">interface Animal {
+    val numberOfLimbs: Int
+    fun move()
+    fun communicate(): String
+}</code></pre><p>Here we have a simple interface – a "skeleton" for the classes that will represent different animals. Now, we just need to learn how to create classes based on such a structure.</p><p>Just to brush up on it, the interface implies that whatever implements it, needs to have, in our example, a certain number of legs (or at least, a corresponding variable) and methods for communicating and moving. But the classes that implement the interface might all be different, so in their respective specific cases, the details of these implementations may vary. The cat moves differently from a bird, but since they both implement the same <code class="language-kotlin">Animal</code> interface, they are guaranteed to be able to move, i.e., to have the <code class="language-kotlin">move</code> function in our simulation. The methods of an interface, just like any other methods, might return some values (as <code class="language-kotlin">communicate</code> in the example above).</p><p>The interface is implemented similarly to inheriting from another class:</p><pre><code class="language-kotlin">class MyAnimalClass : Animal {
+	/* ... */    
+}</code></pre><p>Then, each field or method declared in the interface, needs to be declared in the class with the keyword <code class="language-kotlin">override</code>, as it shows that we "overwrite" the general case of the interface with the specifics of its implementation.<br/>If in this new class we need to have some methods that are not part of the interface we're implementing, <code class="language-kotlin">override</code> should be omitted.</p><pre><code class="language-kotlin">interface Animal {
+    fun myAnimalMethod() { /* ... */
+    }
+    // The body of the method is going to be replaced by the implementation of MyAnimalClass.
+}
+
+class MyAnimalClass : Animal {
+    override fun myAnimalMethod()
+    /* ... */
+}</code></pre><h5 id="example">Example</h5><p>Let's take a look at a more in-depth example featuring our <code class="language-kotlin">Animal</code> interface:</p><pre><code class="language-kotlin">class Cat : Animal {
+    override val numberOfLimbs: Int = 4
+
+    override fun move() {
+        run()
+    }
+
+    override fun communicate(): String {        
+        return sayMeow()
+    }
+}</code></pre><p>Note: the cat is an animal and has a defined type of movement, as opposed to the general movement ability of all animals stated in the interface.</p><pre><code class="language-kotlin">class Parrot : Animal {
+    override val numberOfLimbs: Int = 2
+
+    override fun move() {
+        fly()
+    }
+
+    override fun communicate(): String {
+        return speak()
+    }
+}</code></pre><p>Note: the parrot is also an animal, but of a specific type (bird), and its implementation is different: it has only 2 lower limbs, and its way of moving differs from that of the cat.</p><p>There's an important thing about implementing interfaces: a class derived from the interface must implement all abstract members of the interface (functions and methods without implementation). Otherwise, we'll get an error:</p><pre><code class="language-kotlin">class Cat : Animal {
+    override val numberOfLimbs: Int = 4
+
+    override fun move() {
+        run()
+    }
+
+/*  an error here
+
+    override fun communicate(): String {
+        return sayMeow()
+    }
+*/
+}</code></pre><p>Note: notice that if we remove the commented part – essentially, making the simulated cat unable to communicate – we'll get an error on the class declaration stating that we haven't implemented a member of the interface.</p><p>It's like constructing a car – if we follow the blueprint but fail to install some of the parts, the car won't be able to function properly. The same is true about the class we're implementing.</p><p>Also, note that we don't have to override every single property or method: if they have a default implementation (which we will discuss in the next part), you don't need to override them. You can do it, though, if the default implementation doesn't suit your goals.</p><h5 id="adding-default-implementation">Adding default implementation</h5><p>Since an interface cannot maintain states, as it's simply a contract for other classes to implement, we can't construct an interface in the following way:</p><pre><code class="language-kotlin">interface Animal {
+    val numberOfLimbs: Int
+    fun move()
+    fun communicate(): String
+    val age = 10 // Error: Property initializers are not allowed in interfaces
+}</code></pre><p>However, we can use getters to achieve the same result (you can't use setters, though, since there are no instances to assign anything to):</p><pre><code class="language-kotlin">interface Animal {
+    val numberOfLimbs: Int
+    fun move()
+    fun communicate(): String
+
+    val age: Int
+        get() = 10
+}</code></pre><p>Since methods represent a kind of series of actions or a certain behavior, default implementation applies to them as well:</p><pre><code class="language-kotlin">interface Animal {
+    val numberOfLimbs: Int
+    fun move()
+    fun communicate(): String
+
+    val age: Int
+        get() = 10
+
+    // Default implementation of a method
+    fun printNumberOfLimbs() {
+        print(numberOfLimbs)
+    }
+}</code></pre><p>Note: default implementation allows you to skip overriding certain properties or methods in a derived class, except for the cases when the default functionality is not sufficient.</p><h5 id="more-than-just-a-pattern">More than just a pattern</h5><p>So far, it might seem like interfaces are a convenient way of making patterns for building classes. However, that's not exactly the case because an interface is mostly used as a model of interaction with a certain object. Interfaces might be compared to contracts because whatever is using this interface is guaranteed to possess the range of qualities defined in it. Thus, we know what to expect from a class, and we can be confident that any particular class that implements a certain interface will have <code class="language-kotlin">method1</code> and <code class="language-kotlin">method2</code>. Moreover, interfaces also define the way we can interact with the implementing class. </p><pre><code class="language-kotlin">interface DataHolder {
+    val id: Int
+    val description: String
+    val currentState: String
+
+    fun printInfo()
+    fun updateInfo()
+    fun clearInfo()
+}
+
+class Entity : DataHolder {
+    /* some code */
+}</code></pre><p>Note: whatever implements the <code class="language-kotlin">DataHolder</code> interface, we can expect it to possess the methods listed above. </p><p>The word "contract" describes the idea of an interface well since when using an implementation of an interface, we are guaranteed to get certain particular methods and properties. </p><h5 id="conclusion">Conclusion</h5><p>Interfaces provide a neat way of generalizing our code and keeping it clean: having first stated what we expect to get from a class, we can create a structure which we will rely on later. If a class implements some interfaces, we know in advance that it will have all the functionality these interfaces promise to us. In the context of OOP, interfaces represent the concepts of abstraction and encapsulation.</p>
+</div>

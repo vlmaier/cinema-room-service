@@ -1,0 +1,30 @@
+type: code
+files:
+- name: src/Main.kt
+  visible: true
+  text: "// Do not change the code below.\n\ndata class Vector2(var x: Int, var y:\
+    \ Int)        \n\ninterface Moving {\n    var currentCoordinates: Vector2\n\n\
+    \    var speed: Int\n\n    var direction: Vector2\n\n    // This function changes\
+    \ X and Y coordinates\n    // of an object by the amount of the object's speed\n\
+    \    // (object has same speed along X and Y axis)\n    // according to direction\
+    \ of the object.\n    fun move()\n\n    // This function reduces the speed of\
+    \ an object\n    // along X and Y axes, subtracting given amount.\n    fun slowDown(subtractedSpeed:\
+    \ Int)\n\n    // This function increases the speed of an object\n    // along\
+    \ X and Y axes, adding given amount.\n    fun speedUp(addedSpeed: Int)\n\n   \
+    \ // This function sets new direction for the object,\n    // overwriting previous\
+    \ values.\n    fun rotate(newDirection: Vector2)\n}\n\n// Do not change the code\
+    \ above.\n\nclass YourMovingObject(\n    override var currentCoordinates: Vector2,\n\
+    \    override var speed: Int,\n    override var direction: Vector2\n) : Moving\
+    \ {\n\n    override fun move() {\n        // Your code here\n    }\n\n    override\
+    \ fun slowDown(subtractedSpeed: Int) {\n        // Your code here\n    }\n\n \
+    \   override fun speedUp(addedSpeed: Int) {\n        // Your code here\n    }\n\
+    \n    override fun rotate(newDirection: Vector2) {\n        // Your code here\n\
+    \    }\n}"
+  learner_created: false
+feedback_link: https://hyperskill.org/learn/step/18229#comment
+status: Solved
+feedback:
+  message: <html>Correct solution</html>
+  time: "Thu, 13 Apr 2023 16:55:17 UTC"
+record: -1
+submission_language: kotlin

@@ -1,0 +1,22 @@
+<h2>Getting familar with implementing Interfaces</h2>
+<div class="step-text">
+<p></p>
+<p>We previously used the quite simple <code class="java">Animal</code> interface as an example. Now to get the hang of it, implement the <code class="java">Dog</code> class, which is supposed to implement the <code class="java">Animal</code> interface.</p>
+<p>For the purpose of this task, consider the dog being as close to normal as you can imagine. It means that the solutions in which dogs can talk or have a suspiciously large number of limbs will be considered wrong.</p>
+<pre><code class="java">fun bark(): String { return barkString }
+fun meow(): String { return meowString }
+fun speak(): String { return speakString }
+
+fun walk() { /* some code */ }
+fun fly() { /* some code */ }
+fun swim() { /* some code */ }
+
+interface Animal {
+    val numberOfLimbs: Int
+    fun move()
+    fun communicate(): String
+}</code></pre><br><br><font color="gray">Memory limit: 256 MB</font><br><font color="gray">Time limit: 8 seconds</font><br><br>
+</div>
+<b>Caution</b><br><br>
+You may see errors in your code or execution results due to missing context. Don’t worry about it, just write the solution and press Check.
+<br><br>

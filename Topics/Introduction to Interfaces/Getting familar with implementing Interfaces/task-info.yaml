@@ -1,0 +1,43 @@
+type: code
+files:
+- name: src/Main.kt
+  visible: true
+  text: |-
+    interface Animal {
+        val numberOfLimbs: Int
+        fun move()
+        fun communicate(): String
+    }
+
+    // Do not change code below.
+
+    fun bark(): String { return "bark" }
+    fun meow(): String { return "meow" }
+    fun speak(): String { return "speak" }
+
+    fun walk() { println("walk") }
+    fun fly() { println("fly") }
+    fun swim() { println("swim") }
+
+    // Do not change code above.
+
+    class Dog : Animal {
+        override val numberOfLimbs: Int
+            get() = /* ? */
+
+        override fun move() {
+            /* Your code here */
+        }
+
+        override fun communicate(): String {
+            /* Your code here */
+        }
+    }
+  learner_created: false
+feedback_link: https://hyperskill.org/learn/step/18227#comment
+status: Solved
+feedback:
+  message: <html>Correct solution</html>
+  time: "Thu, 13 Apr 2023 16:44:04 UTC"
+record: -1
+submission_language: kotlin

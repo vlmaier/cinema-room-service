@@ -1,0 +1,36 @@
+<h2>Implementing an interface</h2>
+<div class="step-text">
+<p></p>
+<p>Suppose we're now making some kind of a 2D simulation, where we have vectors and moving objects. Fix the implementation of the interface <code class="language-kotlin">Moving</code> and implement its functions in the <code class="language-kotlin">YourMovingObject</code> class.</p>
+<pre><code class="language-kotlin">data class Vector2(var x: Int, var y: Int)        
+
+interface Moving {
+    var currentCoordinates: Vector2
+
+    var speed: Int
+
+    var direction: Vector2
+
+    // This function changes the X and Y coordinates
+    // Vector2 of the object by the value equal to 
+    // the multiplied speed of the object by the direction 
+    // of the object plus the current coordinate.
+    // (the object has the same speed along the X and Y axes).
+    fun move()
+
+    // This function reduces the speed of an object
+    // along X and Y axes 
+    fun slowDown(subtractedSpeed: Int)
+
+    // This function increases the speed of an object
+    // along X and Y axes 
+    fun speedUp(addedSpeed: Int)
+
+    // This function sets a new speed vector, 
+    // changing the X and Y values of speed
+    fun rotate(newDirection: Vector2)
+}</code></pre><br><br><font color="gray">Memory limit: 256 MB</font><br><font color="gray">Time limit: 8 seconds</font><br><br>
+</div>
+<b>Caution</b><br><br>
+You may see errors in your code or execution results due to missing context. Don’t worry about it, just write the solution and press Check.
+<br><br>
