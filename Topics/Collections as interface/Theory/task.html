@@ -1,0 +1,106 @@
+<h2>Collections as interface</h2>
+<div class="step-text">
+<p>Kotlin collections offer convenient ways for different operations with data. They also implement an interface and thus can be used to operate with different types of data. For instance, you can write a function that can print each element of both <code class="language-kotlin">Set</code> and <code class="language-kotlin">List</code>. Let's figure out how it works.</p><h5 id="iterable">Iterable</h5><p>We have already figured out that there are two universal interfaces in Kotlin: <code class="language-kotlin">Iterable</code> and <code class="language-kotlin">MutableIterable</code>. They provide methods for working with sequences of elements. </p><p>Classes that inherit from <code class="language-kotlin">Iterable</code> have a set of common methods: <code class="language-kotlin">iterator()</code>, <code class="language-kotlin">forEach()</code>, <code class="language-kotlin">contains()</code>, <code class="language-kotlin">count()</code>, <code class="language-kotlin">drop()</code>, <code class="language-kotlin">filter()</code>, etc. <code class="language-kotlin">MutableIterable</code>, unlike <code class="language-kotlin">Iterable</code>, also supports removing elements during iterations. For example, <code class="language-kotlin">remove()</code> and <code class="language-kotlin">removeAll()</code>. It's interesting that they both contain the method <code class="language-kotlin">drop()</code>, which drops a certain element. But unlike <code class="language-kotlin">remove()</code> from <code class="language-kotlin">MutableIterable</code>, which really removes a certain element in a certain object, <code class="language-kotlin">drop()</code> returns a new object.</p><p>Notice that you can use one iterator only once per iteration over <code class="language-kotlin">List</code> (or <code class="language-kotlin">Set</code>). If you want to do it one more time, you must create a new iterator. But you can also use iteration with the <code class="language-kotlin">for</code> loop or <code class="language-kotlin">forEach()</code>. </p><h5 id="collection-interfaces">Collection interfaces</h5><p>And now, let's consider how inheritance works in Kotlin's collections. In the diagram below, you can see relations between different classes. There are two iterable interfaces, which we have considered above. Interfaces <code class="language-kotlin">Collection&lt;T&gt;</code> and <code class="language-kotlin">MutableCollection&lt;T&gt;</code> inherit from them. In their turn, <code class="language-kotlin">List</code> and <code class="language-kotlin">Set</code> inherit from <code class="language-kotlin">Collection&lt;T&gt;</code>, and <code class="language-kotlin">MutableList</code> and <code class="language-kotlin">MutableSet</code> — from <code class="language-kotlin">MutableCollection&lt;T&gt;</code>.</p><p><img alt="relationships between different classes in Kotlin collections" height="1245" src="https://ucarecdn.com/c42163ac-1820-4e52-9c61-eead8d6637e3/" width="1627"/></p><p><code class="language-kotlin">Collection&lt;T&gt;</code> is the root for a hierarchy of immutable collections — <code class="language-kotlin">List</code> and <code class="language-kotlin">Set</code>. It provides methods like <code class="language-kotlin">size</code>, <code class="language-kotlin">get()</code>, <code class="language-kotlin">find()</code>, <code class="language-kotlin">filter()</code>, <code class="language-kotlin">count()</code>, etc. <code class="language-kotlin">MutableCollections&lt;T&gt;</code> is the root for <code class="language-kotlin">MutableList</code> and <code class="language-kotlin">MutableSet</code>, and it supports adding and removing elements with the help of the following methods: <code class="language-kotlin">add()</code>, <code class="language-kotlin">addAll()</code>, <code class="language-kotlin">remove()</code>, <code class="language-kotlin">removeAll()</code>, <code class="language-kotlin">retainAll()</code>, and <code class="language-kotlin">drop()</code>.</p><p><code class="language-kotlin">Collection</code> and <code class="language-kotlin">MutableCollection</code> inherit from <code class="language-kotlin">Iterable</code> and <code class="language-kotlin">MutableIterable</code>. So, these interfaces support all the methods available to their parents.</p><p>However, maps don't represent <code class="language-kotlin">Collection</code> or <code class="language-kotlin">Iterable</code> interfaces, though we also call them collections. It means that they have methods different from other collections. And it is logical because they contain key-value pairs — as opposed to single elements in <code class="language-kotlin">Set</code> or <code class="language-kotlin">List</code>, so we need to separate methods for them. Unfortunately, we can't use <code class="language-kotlin">Map</code> with <code class="language-kotlin">Collection</code> interfaces.</p><h5 id="collection">Collection</h5><p>Let's see how we can use these interfaces. For instance, we want to print all the collection elements. In this case, we can use a for loop, <code class="language-kotlin">iterator()</code>, or the <code class="language-kotlin">forEach()</code> method:</p><pre><code class="language-kotlin">// All realizations of the function printAll do the same thing.
+
+fun printAll(strings: Collection&lt;String&gt;) {
+    for(str in strings) print("$str ")
+}
+
+fun printAll(songs: Collection&lt;String&gt;) {
+    songs.forEach { print("$it ") }
+}
+
+fun printAll(songs: Collection&lt;String&gt;) {
+    val songsIterator = songs.iterator() // We create iterator, which will help us go through the List
+
+    while (songsIterator.hasNext()) { // hasNext() checks if our iterator contains next element
+        print("${songsIterator.next()} ") // next() moves the pointer to the next element of iterator
+    }
+}
+
+val listOfSongs = listOf("Creep", "Idioteque", "Street Spirit", "Paranoid Android") // We can also use setOf()
+printAll(listOfSongs) // Creep Idioteque Street Spirit Paranoid Android</code></pre><p>Cool! We are now able to work with both types of immutable collections <code class="language-kotlin">Set</code> and <code class="language-kotlin">List</code>.</p><p>You can use one iterator only once per iteration over <code class="language-kotlin">List</code> (or <code class="language-kotlin">Set</code>). If you want to do it one more time, you must create a new <code class="language-kotlin">iterator()</code>.</p><p>There are some common methods for all collections.</p><ul><li><p><code class="language-kotlin">count()</code> returns the number of elements that meet the conditions.</p></li><li><p><code class="language-kotlin">drop()</code> returns a new <code class="language-kotlin">List</code> of elements without <code class="language-kotlin">n</code> first elements.</p></li><li><p><code class="language-kotlin">containsAll()</code> checks if the collection contains all elements from another collection and returns <code class="language-kotlin">true</code> or <code class="language-kotlin">false</code>. </p></li></ul><p>Some examples:</p><pre><code class="language-kotlin">fun countElements(strings: Collection&lt;String&gt;) = strings.count { it.matches("\\w+".toRegex()) }
+
+fun dropElements(songs: Collection&lt;String&gt;) = songs.drop(2).toSet()
+
+fun compareCollections(old: Collection&lt;String&gt;, new: Collection&lt;String&gt;) = old.containsAll(new)
+
+val setOfSongs = setOf("Creep", "Idioteque", "Street Spirit", "Paranoid Android")
+val listOfSongs = listOf("Creep", "Idioteque", "Street Spirit", "Paranoid Android")
+
+println(countElements(setOfSongs)) // output: 2
+println(dropElements(listOfSongs)) // output: [Street Spirit, Paranoid Android]
+println(compareCollections(listOfSongs, setOfSongs)) // output: true</code></pre><ul><li><p><code class="language-kotlin">joinToString()</code> returns the collection as a string with a specific delimiter.</p></li><li><p><code class="language-kotlin">find()</code> returns the first element which fits the pattern.</p></li><li><p><code class="language-kotlin">filter()</code> returns a <code class="language-kotlin">List</code> of elements that meet the conditions.</p></li><li><p><code class="language-kotlin">minus()</code> returns the collection without the element or elements specified in the condition.</p></li><li><p><code class="language-kotlin">random()</code> returns a random element of the collection.</p></li></ul><p>Some examples:</p><pre><code class="language-kotlin">fun convertToString(strings: Collection&lt;String&gt;) = strings.joinToString(" | ")
+
+fun findElement(strings: Collection&lt;String&gt;) = strings.find { it.contains("I") }
+
+fun filterElements(strings: Collection&lt;String&gt;) = strings.filter { it.contains("t") }
+
+fun returnRandomElement(strings: Collection&lt;String&gt;) = strings.random()
+
+fun decreaseCollection(strings: Collection&lt;String&gt;) = strings.minus("Creep") 
+// minus could have a collection as parameter
+
+val listOfSongs = listOf("Creep", "Idioteque", "Street Spirit", "Paranoid Android")
+val setOfSongs = setOf("Creep", "Idioteque", "Street Spirit", "Paranoid Android")
+
+println(convertToString(listOfSongs)) // output: Creep | Idioteque | Street Spirit | Paranoid Android
+println(findElement(setOfSongs)) // output: Idioteque
+println(filterElements(listOfSongs)) // output: [Idioteque, Street Spirit]
+println(returnRandomElement(setOfSongs)) // output: Street Spirit
+println(decreaseCollection(setOfSongs)) // output: [Idioteque, Street Spirit, Paranoid Android]</code></pre><p> </p><p>Notice that <code class="language-kotlin">drop()</code> or <code class="language-kotlin">minus()</code> don’t change the original collection; instead, they create a new collection, so they also work with <code class="language-kotlin">Collection&lt;T&gt;</code>, an immutable type.</p><p> </p><h5 id="mutablecollection">MutableCollection</h5><p>Now, let's consider the use of <code class="language-kotlin">MutableCollection</code>. It can use all the methods from <code class="language-kotlin">Collection</code>, but it also has some specific operations.</p><p>Notice that the specific <code class="language-kotlin">MutableCollection</code> methods, unlike <code class="language-kotlin">drop()</code> or <code class="language-kotlin">minus()</code>, change the original collection. So a function with these methods will return a boolean value — <code class="language-kotlin">true</code> if the operation was successful and <code class="language-kotlin">false</code> if the operation failed. You have already studied these methods, and they work the same way with <code class="language-kotlin">MutableCollection</code> as a function argument.</p><ul><li><p><code class="language-kotlin">addAll()</code> adds all elements from one collection to another.</p></li><li><p><code class="language-kotlin">add()</code> adds one element to a collection.</p></li><li><p><code class="language-kotlin">clear()</code> removes all elements from a collection.</p></li><li><p><code class="language-kotlin">remove()</code> removes the first occurrence of a certain element from a collection.</p></li></ul><p>See the examples below:</p><pre><code class="language-kotlin">fun addCollection(old: MutableCollection&lt;String&gt;, new: Collection&lt;String&gt;) {
+    old.addAll(new)
+}
+
+fun addNewElement(old: MutableCollection&lt;String&gt;) {
+    old.add("Spectre")
+}
+
+fun clearCollection(old: MutableCollection&lt;String&gt;) {
+    old.clear()
+}
+
+fun removeElement(old: MutableCollection&lt;String&gt;): Boolean {
+    return old.remove("Creep")
+}
+
+val oldSongs = mutableSetOf("Creep", "Street Spirit")
+val newSongs = listOf("Creep", "Street Spirit", "Paranoid Android")
+
+clearCollection(oldSongs)
+println(oldSongs) // []
+
+addCollection(oldSongs, newSongs)
+println(oldSongs) // [Creep, Street Spirit, Paranoid Android]
+
+addNewElement(oldSongs)
+println(oldSongs) // [Creep, Street Spirit, Paranoid Android, Spectre]
+
+removeElement(oldSongs)
+println(oldSongs) // [Street Spirit, Paranoid Android, Spectre]
+println(removeElement(oldSongs)) // false because this collection doesn't contain "Creep"</code></pre><p>The <code class="language-kotlin">retainAll()</code> method leaves the unique elements in the collection — only those that are also contained in the specified collection.</p><pre><code class="language-kotlin">fun retainAllFromCollection(old: MutableCollection&lt;String&gt;, new: Collection&lt;String&gt;) {
+    old.retainAll(new)
+}
+
+val oldSongs = mutableSetOf("Creep", "Street Spirit", "Paranoid Android")
+val newSongs = listOf("Spectre", "Street Spirit")
+retainAllFromCollection(oldSongs, newSongs)
+println(oldSongs) // [Street Spirit]</code></pre><p>Thus, you can use <code class="language-kotlin">Collection</code> and <code class="language-kotlin">MutableCollection</code> interfaces to perform any universal operations with their inheritors and don't need to think about their types.</p><h5 id="function-and-collections">Function and collections</h5><p>Considering collections as interfaces and keeping in mind the inheritance of data types, you can create functions for processing different data. And it isn't only about the <code class="language-kotlin">Collection</code> type — you can create functions with parameters of a certain type, <code class="language-kotlin">List</code> or <code class="language-kotlin">Set</code>, with the parent type of unit within them. </p><pre><code class="language-kotlin">fun processNumbers(list: List&lt;Number&gt;) {
+    list.forEach { print("$it ") }
+}
+
+val numbers1 = listOf(0, 12, 10)
+val numbers2 = listOf(0.0, 12.0, 10.0)
+val numbers3 = listOf(423324534536356, 4L, 56L)
+
+processNumbers(numbers1) // 0 12 10
+processNumbers(numbers2) // 0.0 12.0 10.0
+processNumbers(numbers3) // 423324534536356 4 56</code></pre><p>In these cases, however, you have a limited set of methods — only the common methods which are possible to apply to the parent data type. For example, if you try to increase each element of a list by 1, the compiler will find a problem:</p><pre><code class="language-kotlin">fun processNumbers(list: List&lt;Number&gt;) {
+    list.forEach { print(it + 1) }
+}</code></pre><p>The compiler’s response is: "Unresolved reference. None of the following candidates is applicable because of receiver type mismatch…"</p><p>It happens because the abstract class <code class="language-kotlin">Number</code> doesn't support any computing operations — they are implemented only in certain classes, like <code class="language-kotlin">Int</code> or <code class="language-kotlin">Double</code>. But <code class="language-kotlin">Number</code> does support different converting operations, like <code class="language-kotlin">toDouble()</code>, <code class="language-kotlin">toInt()</code>, or <code class="language-kotlin">toChar()</code>:</p><pre><code class="language-kotlin">fun processNumbers(list: List&lt;Number&gt;) {
+    list.forEach { print("${it.toChar()} ") }
+}
+
+val numbers1 = listOf(41, 42, 43)
+processNumbers(numbers1) // ) * +</code></pre><h5 id="conclusion">Conclusion</h5><p>In this topic, we have learned that collections are also interfaces. You can use them for universal operations with different types of data. We've also seen that even though we call <code class="language-kotlin">Map</code> a collection, this data type doesn't inherit from <code class="language-kotlin">Collection</code>.</p><p>Now, you can write universal functions for processing different collection types, like <code class="language-kotlin">Set</code> or <code class="language-kotlin">List</code>, <code class="language-kotlin">MutableSet</code> or <code class="language-kotlin">MutableList</code>. No need to care about their type: the important thing is that they inherit from <code class="language-kotlin">Collection</code> or <code class="language-kotlin">MutableCollection</code>. </p><p>Also, keep in mind that <code class="language-kotlin">Set</code> doesn’t inherit from <code class="language-kotlin">MutableCollection</code>, likewise <code class="language-kotlin">MutableList</code> doesn’t inherit from <code class="language-kotlin">Collection</code>.</p>
+</div>

@@ -1,0 +1,23 @@
+type: code
+files:
+- name: src/Main.kt
+  visible: true
+  text: |-
+    fun main() {
+        val originalList = readln().split(" ")
+        val originalSet = originalList.toSet()
+        val word = readln()
+
+        println(dropElements(originalList, word))
+        println(dropElements(originalSet, word))
+    }
+
+    // Write function dropElements() here
+  learner_created: false
+feedback_link: https://hyperskill.org/learn/step/19761#comment
+status: Solved
+feedback:
+  message: <html>Correct solution</html>
+  time: "Thu, 13 Apr 2023 17:11:52 UTC"
+record: -1
+submission_language: kotlin

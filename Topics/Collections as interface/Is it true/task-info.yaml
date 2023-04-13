@@ -1,0 +1,24 @@
+type: code
+custom_name: Is it true?
+files:
+- name: src/Main.kt
+  visible: true
+  text: |-
+    fun main() {
+        val nameList = readln().split(" ").toMutableList()
+        val nameSet = nameList.toMutableSet()
+        val name = readln()
+
+        println(checkElements(nameList, name))
+        println(checkElements(nameSet, name))
+    }
+
+    // Write here function checkElements()
+  learner_created: false
+feedback_link: https://hyperskill.org/learn/step/19759#comment
+status: Solved
+feedback:
+  message: <html>Correct solution</html>
+  time: "Thu, 13 Apr 2023 17:08:19 UTC"
+record: -1
+submission_language: kotlin
