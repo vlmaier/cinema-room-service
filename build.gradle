@@ -26,10 +26,10 @@ subprojects {
     dependencies {
         implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
         implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
-        testImplementation 'com.github.hyperskill:hs-test:release-SNAPSHOT'
+        testImplementation 'com.github.hyperskill:hs-test:master-SNAPSHOT'
     }
 
-    configurations.all {
+    configurations.configureEach {
         resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
     }
 
@@ -56,8 +56,10 @@ subprojects {
     }
 
     compileJava.options.encoding = 'utf-8'
-    tasks.withType(JavaCompile) {
-        options.encoding = 'utf-8'
+    tasks.withType(JavaCompile).tap {
+        configureEach {
+            options.encoding = 'utf-8'
+        }
     }
 }
 
