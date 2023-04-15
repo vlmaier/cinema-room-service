@@ -63,7 +63,7 @@ subprojects {
 
 project(':util') {
     dependencies {
-        implementation 'com.github.hyperskill:hs-test:release-SNAPSHOT'
+        implementation 'com.github.hyperskill:hs-test:master-SNAPSHOT'
     }
 }
 
