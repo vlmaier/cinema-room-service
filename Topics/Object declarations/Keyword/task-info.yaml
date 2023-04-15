@@ -1,0 +1,21 @@
+type: choice
+is_multiple_choice: false
+options:
+- text: It holds data and performs some basic operations with it
+- text: It has only one instance and has access point from anywhere in the code
+- text: It can't be created manually and does not have an implementation
+- text: It wraps any type for increasing type safety
+files:
+- name: src/Main.kt
+  visible: true
+  text: |
+    // You can experiment here, it won’t be checked
+
+    fun main(args: Array<String>) {
+      // put your code here
+    }
+  learner_created: false
+feedback_link: https://hyperskill.org/learn/step/10700#comment
+status: Solved
+record: -1
+local_check: false
