@@ -124,9 +124,9 @@ files:
 - name: src/cinema/seats/AvailableSeats.kt
   visible: true
   learner_created: true
-feedback_link: https://hyperskill.org/projects/263/stages/1331/implement#comment
+feedback_link: https://hyperskill.org/learn/step/20457#comment
 status: Solved
 feedback:
   message: Congratulations!
   time: "Thu, 20 Apr 2023 18:04:49 UTC"
-record: -1
+record: 1

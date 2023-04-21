@@ -225,6 +225,84 @@ files:
         };
     }
   learner_created: false
-feedback_link: https://hyperskill.org/projects/263/stages/1332/implement#comment
+- name: src/cinema/CinemaController.kt
+  visible: true
+  text: |-
+    package cinema
+
+    import cinema.seats.AvailableSeats
+    import cinema.seats.SeatService
+    import org.springframework.web.bind.annotation.GetMapping
+    import org.springframework.web.bind.annotation.RestController
+
+    @RestController
+    class CinemaController(
+        private val seatService: SeatService
+    ) {
+
+        @GetMapping("/seats")
+        fun getSeats(): AvailableSeats {
+            val seats = seatService.getSeats()
+            val maxRow = seats.map { it.row }.maxOf { it }
+            val maxColumn = seats.map { it.column }.maxOf { it }
+            return AvailableSeats(
+                totalRows = maxRow,
+                totalColumns = maxColumn,
+                availableSeats = seats,
+            )
+        }
+    }
+  learner_created: true
+- name: src/cinema/seats/SeatService.kt
+  visible: true
+  text: |
+    package cinema.seats
+
+    import org.springframework.stereotype.Service
+
+    @Service
+    class SeatService {
+
+        fun getSeats(): List<Seat> {
+            val seats: MutableList<Seat> = mutableListOf()
+            val range = 1..SEATS_EACH
+            for (row in range) {
+                for (column in range) {
+                    seats.add(Seat(row, column))
+                }
+            }
+            return seats
+        }
+    }
+
+    private const val SEATS_EACH = 9
+  learner_created: true
+- name: src/cinema/seats/Seat.kt
+  visible: true
+  text: |-
+    package cinema.seats
+
+    data class Seat (
+        val row: Int,
+        val column: Int,
+    )
+  learner_created: true
+- name: src/cinema/seats/AvailableSeats.kt
+  visible: true
+  text: |-
+    package cinema.seats
+
+    import com.fasterxml.jackson.annotation.JsonProperty
+
+    data class AvailableSeats(
+        @JsonProperty("total_rows")
+        val totalRows: Int,
+        @JsonProperty("total_columns")
+        val totalColumns: Int,
+        @JsonProperty("available_seats")
+        val availableSeats: List<Seat>,
+    )
+  learner_created: true
+feedback_link: https://hyperskill.org/learn/step/20458#comment
 status: Unchecked
 record: -1

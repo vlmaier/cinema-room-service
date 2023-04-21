@@ -1,0 +1,14 @@
+type: code
+files:
+- name: src/Main.kt
+  visible: true
+  text: "// ...\ntry {\n    problemFunction()\n} catch (e: Exception) {\n    println()\n\
+    } \n// ..."
+  learner_created: false
+feedback_link: https://hyperskill.org/learn/step/10627#comment
+status: Solved
+feedback:
+  message: <html>Correct solution</html>
+  time: "Fri, 21 Apr 2023 05:17:43 UTC"
+record: -1
+submission_language: kotlin
