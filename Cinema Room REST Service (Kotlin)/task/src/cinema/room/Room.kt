@@ -1,12 +1,12 @@
-package cinema.seats
+package cinema.room
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
-data class AvailableSeats(
+data class Room(
     @JsonProperty("total_rows")
     val totalRows: Int,
     @JsonProperty("total_columns")
-    val totalColumns: Int,
+    val seatsPerRow: Int,
     @JsonProperty("available_seats")
     val availableSeats: List<Seat>,
 )
