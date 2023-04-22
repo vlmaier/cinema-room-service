@@ -2,7 +2,7 @@ openapi: "3.0.3"
 info:
   title: "Cinema Room Service API"
   description: "Cinema Room Service API"
-  version: "1.0.0"◊
+  version: "1.0.0"
 servers:
   - url: "localhost"
 paths:
