@@ -1,4 +1,4 @@
-package cinema.room
+package cinema.model
 
 import com.fasterxml.jackson.annotation.JsonProperty
 

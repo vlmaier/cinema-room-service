@@ -253,7 +253,23 @@ files:
         }
     }
   learner_created: true
-- name: src/cinema/room/Seat.kt
+- name: src/cinema/model/Room.kt
+  visible: true
+  text: |-
+    package cinema.seats
+
+    import com.fasterxml.jackson.annotation.JsonProperty
+
+    data class AvailableSeats(
+        @JsonProperty("total_rows")
+        val totalRows: Int,
+        @JsonProperty("total_columns")
+        val totalColumns: Int,
+        @JsonProperty("available_seats")
+        val availableSeats: List<Seat>,
+    )
+  learner_created: true
+- name: src/cinema/model/Seat.kt
   visible: true
   text: |-
     package cinema.seats
@@ -263,7 +279,13 @@ files:
         val column: Int,
     )
   learner_created: true
-- name: src/cinema/room/RoomService.kt
+- name: src/cinema/model/Ticket.kt
+  visible: true
+  learner_created: true
+- name: src/cinema/model/TicketRequest.kt
+  visible: true
+  learner_created: true
+- name: src/cinema/service/CinemaService.kt
   visible: true
   text: |
     package cinema.seats
@@ -287,360 +309,21 @@ files:
 
     private const val SEATS_EACH = 9
   learner_created: true
-- name: src/cinema/room/Room.kt
+- name: src/cinema/error/ExceptionHandler.kt
   visible: true
-  text: |-
-    package cinema.seats
-
-    import com.fasterxml.jackson.annotation.JsonProperty
-
-    data class AvailableSeats(
-        @JsonProperty("total_rows")
-        val totalRows: Int,
-        @JsonProperty("total_columns")
-        val totalColumns: Int,
-        @JsonProperty("available_seats")
-        val availableSeats: List<Seat>,
-    )
+  learner_created: true
+- name: src/cinema/error/InvalidSeatException.kt
+  visible: true
+  learner_created: true
+- name: src/cinema/error/UnavailableSeatException.kt
+  visible: true
+  learner_created: true
+- name: src/cinema/model/ErrorInfo.kt
+  visible: true
   learner_created: true
 feedback_link: https://hyperskill.org/learn/step/20458#comment
-status: Failed
+status: Solved
 feedback:
-  message: |-
-    Wrong answer in test #2
-
-    The JSON element at path &quot;/available_seats/0&quot; should contain a key &quot;price&quot;
-
-    Full JSON:
-    {
-      &quot;total_rows&quot;: 9,
-      &quot;total_columns&quot;: 9,
-      &quot;available_seats&quot;: [
-        {
-          &quot;column&quot;: 1,
-          &quot;row&quot;: 1
-        },
-        {
-          &quot;column&quot;: 2,
-          &quot;row&quot;: 1
-        },
-        {
-          &quot;column&quot;: 3,
-          &quot;row&quot;: 1
-        },
-        {
-          &quot;column&quot;: 4,
-          &quot;row&quot;: 1
-        },
-        {
-          &quot;column&quot;: 5,
-          &quot;row&quot;: 1
-        },
-        {
-          &quot;column&quot;: 6,
-          &quot;row&quot;: 1
-        },
-        {
-          &quot;column&quot;: 7,
-          &quot;row&quot;: 1
-        },
-        {
-          &quot;column&quot;: 8,
-          &quot;row&quot;: 1
-        },
-        {
-          &quot;column&quot;: 9,
-          &quot;row&quot;: 1
-        },
-        {
-          &quot;column&quot;: 1,
-          &quot;row&quot;: 2
-        },
-        {
-          &quot;column&quot;: 2,
-          &quot;row&quot;: 2
-        },
-        {
-          &quot;column&quot;: 3,
-          &quot;row&quot;: 2
-        },
-        {
-          &quot;column&quot;: 4,
-          &quot;row&quot;: 2
-        },
-        {
-          &quot;column&quot;: 5,
-          &quot;row&quot;: 2
-        },
-        {
-          &quot;column&quot;: 6,
-          &quot;row&quot;: 2
-        },
-        {
-          &quot;column&quot;: 7,
-          &quot;row&quot;: 2
-        },
-        {
-          &quot;column&quot;: 8,
-          &quot;row&quot;: 2
-        },
-        {
-          &quot;column&quot;: 9,
-          &quot;row&quot;: 2
-        },
-        {
-          &quot;column&quot;: 1,
-          &quot;row&quot;: 3
-        },
-        {
-          &quot;column&quot;: 2,
-          &quot;row&quot;: 3
-        },
-        {
-          &quot;column&quot;: 3,
-          &quot;row&quot;: 3
-        },
-        {
-          &quot;column&quot;: 4,
-          &quot;row&quot;: 3
-        },
-        {
-          &quot;column&quot;: 5,
-          &quot;row&quot;: 3
-        },
-        {
-          &quot;column&quot;: 6,
-          &quot;row&quot;: 3
-        },
-        {
-          &quot;column&quot;: 7,
-          &quot;row&quot;: 3
-        },
-        {
-          &quot;column&quot;: 8,
-          &quot;row&quot;: 3
-        },
-        {
-          &quot;column&quot;: 9,
-          &quot;row&quot;: 3
-        },
-        {
-          &quot;column&quot;: 1,
-          &quot;row&quot;: 4
-        },
-        {
-          &quot;column&quot;: 2,
-          &quot;row&quot;: 4
-        },
-        {
-          &quot;column&quot;: 3,
-          &quot;row&quot;: 4
-        },
-        {
-          &quot;column&quot;: 4,
-          &quot;row&quot;: 4
-        },
-        {
-          &quot;column&quot;: 5,
-          &quot;row&quot;: 4
-        },
-        {
-          &quot;column&quot;: 6,
-          &quot;row&quot;: 4
-        },
-        {
-          &quot;column&quot;: 7,
-          &quot;row&quot;: 4
-        },
-        {
-          &quot;column&quot;: 8,
-          &quot;row&quot;: 4
-        },
-        {
-          &quot;column&quot;: 9,
-          &quot;row&quot;: 4
-        },
-        {
-          &quot;column&quot;: 1,
-          &quot;row&quot;: 5
-        },
-        {
-          &quot;column&quot;: 2,
-          &quot;row&quot;: 5
-        },
-        {
-          &quot;column&quot;: 3,
-          &quot;row&quot;: 5
-        },
-        {
-          &quot;column&quot;: 4,
-          &quot;row&quot;: 5
-        },
-        {
-          &quot;column&quot;: 5,
-          &quot;row&quot;: 5
-        },
-        {
-          &quot;column&quot;: 6,
-          &quot;row&quot;: 5
-        },
-        {
-          &quot;column&quot;: 7,
-          &quot;row&quot;: 5
-        },
-        {
-          &quot;column&quot;: 8,
-          &quot;row&quot;: 5
-        },
-        {
-          &quot;column&quot;: 9,
-          &quot;row&quot;: 5
-        },
-        {
-          &quot;column&quot;: 1,
-          &quot;row&quot;: 6
-        },
-        {
-          &quot;column&quot;: 2,
-          &quot;row&quot;: 6
-        },
-        {
-          &quot;column&quot;: 3,
-          &quot;row&quot;: 6
-        },
-        {
-          &quot;column&quot;: 4,
-          &quot;row&quot;: 6
-        },
-        {
-          &quot;column&quot;: 5,
-          &quot;row&quot;: 6
-        },
-        {
-          &quot;column&quot;: 6,
-          &quot;row&quot;: 6
-        },
-        {
-          &quot;column&quot;: 7,
-          &quot;row&quot;: 6
-        },
-        {
-          &quot;column&quot;: 8,
-          &quot;row&quot;: 6
-        },
-        {
-          &quot;column&quot;: 9,
-          &quot;row&quot;: 6
-        },
-        {
-          &quot;column&quot;: 1,
-          &quot;row&quot;: 7
-        },
-        {
-          &quot;column&quot;: 2,
-          &quot;row&quot;: 7
-        },
-        {
-          &quot;column&quot;: 3,
-          &quot;row&quot;: 7
-        },
-        {
-          &quot;column&quot;: 4,
-          &quot;row&quot;: 7
-        },
-        {
-          &quot;column&quot;: 5,
-          &quot;row&quot;: 7
-        },
-        {
-          &quot;column&quot;: 6,
-          &quot;row&quot;: 7
-        },
-        {
-          &quot;column&quot;: 7,
-          &quot;row&quot;: 7
-        },
-        {
-          &quot;column&quot;: 8,
-          &quot;row&quot;: 7
-        },
-        {
-          &quot;column&quot;: 9,
-          &quot;row&quot;: 7
-        },
-        {
-          &quot;column&quot;: 1,
-          &quot;row&quot;: 8
-        },
-        {
-          &quot;column&quot;: 2,
-          &quot;row&quot;: 8
-        },
-        {
-          &quot;column&quot;: 3,
-          &quot;row&quot;: 8
-        },
-        {
-          &quot;column&quot;: 4,
-          &quot;row&quot;: 8
-        },
-        {
-          &quot;column&quot;: 5,
-          &quot;row&quot;: 8
-        },
-        {
-          &quot;column&quot;: 6,
-          &quot;row&quot;: 8
-        },
-        {
-          &quot;column&quot;: 7,
-          &quot;row&quot;: 8
-        },
-        {
-          &quot;column&quot;: 8,
-          &quot;row&quot;: 8
-        },
-        {
-          &quot;column&quot;: 9,
-          &quot;row&quot;: 8
-        },
-        {
-          &quot;column&quot;: 1,
-          &quot;row&quot;: 9
-        },
-        {
-          &quot;column&quot;: 2,
-          &quot;row&quot;: 9
-        },
-        {
-          &quot;column&quot;: 3,
-          &quot;row&quot;: 9
-        },
-        {
-          &quot;column&quot;: 4,
-          &quot;row&quot;: 9
-        },
-        {
-          &quot;column&quot;: 5,
-          &quot;row&quot;: 9
-        },
-        {
-          &quot;column&quot;: 6,
-          &quot;row&quot;: 9
-        },
-        {
-          &quot;column&quot;: 7,
-          &quot;row&quot;: 9
-        },
-        {
-          &quot;column&quot;: 8,
-          &quot;row&quot;: 9
-        },
-        {
-          &quot;column&quot;: 9,
-          &quot;row&quot;: 9
-        }
-      ]
-    }
-  time: "Fri, 21 Apr 2023 05:25:20 UTC"
+  message: Congratulations!
+  time: "Sat, 22 Apr 2023 09:28:21 UTC"
 record: -1

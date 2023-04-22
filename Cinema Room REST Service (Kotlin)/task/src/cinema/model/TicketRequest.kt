@@ -1,8 +1,8 @@
-package cinema.room
+package cinema.model
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
-data class Seat (
+data class TicketRequest(
     val row: Int,
     @JsonProperty("column")
     val number: Int,
