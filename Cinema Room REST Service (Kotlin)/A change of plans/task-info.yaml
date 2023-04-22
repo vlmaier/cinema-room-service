@@ -299,6 +299,249 @@ files:
         };
     }
   learner_created: false
+- name: src/cinema/model/Seat.kt
+  visible: true
+  text: |-
+    package cinema.model
+
+    import com.fasterxml.jackson.annotation.JsonProperty
+
+    data class Seat (
+        val row: Int,
+        @JsonProperty("column")
+        val number: Int,
+        val price: Int,
+    )
+
+    fun Seat.toTicket(): Ticket {
+        return Ticket(
+            row = row,
+            number = number,
+            price = price,
+        )
+    }
+  learner_created: true
+- name: src/cinema/model/Room.kt
+  visible: true
+  text: |-
+    package cinema.model
+
+    import com.fasterxml.jackson.annotation.JsonProperty
+
+    data class Room(
+        @JsonProperty("total_rows")
+        val totalRows: Int,
+        @JsonProperty("total_columns")
+        val seatsPerRow: Int,
+        @JsonProperty("available_seats")
+        val availableSeats: List<Seat>,
+    )
+  learner_created: true
+- name: src/cinema/model/ErrorInfo.kt
+  visible: true
+  text: |
+    package cinema.model
+
+    import com.fasterxml.jackson.annotation.JsonProperty
+
+    data class ErrorInfo(
+        @JsonProperty("error")
+        val message: String,
+    )
+  learner_created: true
+- name: src/cinema/model/TicketRequest.kt
+  visible: true
+  text: |
+    package cinema.model
+
+    import com.fasterxml.jackson.annotation.JsonProperty
+
+    data class TicketRequest(
+        val row: Int,
+        @JsonProperty("column")
+        val number: Int,
+    )
+  learner_created: true
+- name: src/cinema/error/UnavailableSeatException.kt
+  visible: true
+  text: |
+    package cinema.error
+
+    class UnavailableSeatException(message: String) : RuntimeException(message)
+  learner_created: true
+- name: src/cinema/error/InvalidSeatException.kt
+  visible: true
+  text: |
+    package cinema.error
+
+    class InvalidSeatException(message: String) : RuntimeException(message)
+  learner_created: true
+- name: src/cinema/error/ExceptionHandler.kt
+  visible: true
+  text: |
+    package cinema.error
+
+    import cinema.model.ErrorInfo
+    import org.springframework.http.HttpStatus
+    import org.springframework.http.ResponseEntity
+
+    import org.springframework.web.bind.annotation.ExceptionHandler
+    import org.springframework.web.bind.annotation.RestControllerAdvice
+    import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
+
+    @RestControllerAdvice
+    class ExceptionHandler : ResponseEntityExceptionHandler() {
+
+        @ExceptionHandler(UnavailableSeatException::class, InvalidSeatException::class)
+        fun onInvalidSeatException(e: RuntimeException): ResponseEntity<ErrorInfo> {
+            val error = ErrorInfo(
+                message = e.message ?: ""
+            )
+            return ResponseEntity(error, HttpStatus.BAD_REQUEST)
+        }
+    }
+  learner_created: true
+- name: src/cinema/service/CinemaService.kt
+  visible: true
+  text: |
+    package cinema.service
+
+    import cinema.error.InvalidSeatException
+    import cinema.error.UnavailableSeatException
+    import cinema.model.Room
+    import cinema.model.Seat
+    import cinema.model.Ticket
+    import cinema.model.toTicket
+    import org.springframework.stereotype.Service
+
+    @Service
+    class CinemaService {
+
+        private val bookedSeats = mutableListOf<Seat>()
+        private val availableSeats = mutableListOf<Seat>()
+
+        init {
+            val seatsPerRow = 1..SEATS_PER_ROW
+            val totalRows = 1..TOTAL_ROWS
+            for (row in totalRows) {
+                for (number in seatsPerRow) {
+                    val price = calculatePrice(row)
+                    availableSeats.add(Seat(row, number, price))
+                }
+            }
+        }
+
+        fun getRoom(): Room {
+            return Room(
+                totalRows = availableSeats.map { it.row }.maxOf { it },
+                seatsPerRow = availableSeats.map { it.number }.maxOf { it },
+                availableSeats = availableSeats,
+            )
+        }
+
+        fun purchaseTicket(row: Int, number: Int): Ticket {
+            if (!isSeatValid(row, number)) {
+                throw InvalidSeatException("The number of a row or a column is out of bounds!")
+            }
+            if (!isSeatAvailable(row, number)) {
+                throw UnavailableSeatException("The ticket has been already purchased!")
+            }
+            val seat = findSeat(row, number)!!
+            bookedSeats.add(seat)
+            availableSeats.remove(seat)
+            return seat.toTicket()
+        }
+
+        private fun isSeatValid(row: Int, number: Int): Boolean {
+            if (row < 0 || number < 0) {
+                return false
+            }
+            return !(row > TOTAL_ROWS || number > SEATS_PER_ROW)
+        }
+
+        private fun isSeatAvailable(row: Int, number: Int): Boolean {
+            return findSeat(row, number) != null
+        }
+
+        private fun calculatePrice(row: Int): Int {
+            val price = BASE_PRICE
+            if (row > LAST_FRONT_ROW) {
+                return price
+            }
+            return price + FRONT_ROW_CHARGE
+        }
+
+        private fun findSeat(row: Int, number: Int): Seat? {
+            return availableSeats.find { it.row == row && it.number == number }
+        }
+    }
+
+    private const val SEATS_PER_ROW = 9
+    private const val TOTAL_ROWS = 9
+    private const val LAST_FRONT_ROW = 4
+    private const val BASE_PRICE = 8
+    private const val FRONT_ROW_CHARGE = 2
+  learner_created: true
+- name: src/cinema/model/Ticket.kt
+  visible: true
+  text: |
+    package cinema.model
+
+    import com.fasterxml.jackson.annotation.JsonProperty
+
+    data class Ticket(
+        val row: Int,
+        @JsonProperty("column")
+        val number: Int,
+        val price: Int,
+    )
+  learner_created: true
+- name: src/cinema/model/Purchase.kt
+  visible: true
+  learner_created: true
+- name: src/cinema/controller/CinemaController.kt
+  visible: true
+  text: |-
+    package cinema
+
+    import cinema.model.Room
+    import cinema.model.Ticket
+    import cinema.model.TicketRequest
+    import cinema.service.CinemaService
+    import org.springframework.web.bind.annotation.GetMapping
+    import org.springframework.web.bind.annotation.PostMapping
+    import org.springframework.web.bind.annotation.RequestBody
+    import org.springframework.web.bind.annotation.RestController
+
+    @RestController
+    class CinemaController(
+        private val cinemaService: CinemaService,
+    ) {
+        @GetMapping("/seats")
+        fun getSeats(): Room {
+            return cinemaService.getRoom()
+        }
+
+        @PostMapping("/purchase")
+        fun purchaseTicket(
+            @RequestBody request: TicketRequest,
+        ): Ticket {
+            return cinemaService.purchaseTicket(request.row, request.number)
+        }
+    }
+  learner_created: true
+- name: src/cinema/error/InvalidTokenException.kt
+  visible: true
+  learner_created: true
+- name: src/cinema/model/Return.kt
+  visible: true
+  learner_created: true
+- name: src/cinema/model/ReturnRequest.kt
+  visible: true
+  learner_created: true
 feedback_link: https://hyperskill.org/learn/step/20459#comment
-status: Unchecked
+status: Solved
+feedback:
+  message: Congratulations!
+  time: "Sat, 22 Apr 2023 10:04:25 UTC"
 record: -1

@@ -1,18 +1,19 @@
 package cinema.service
 
 import cinema.error.InvalidSeatException
+import cinema.error.InvalidTokenException
 import cinema.error.UnavailableSeatException
-import cinema.model.Room
-import cinema.model.Seat
-import cinema.model.Ticket
-import cinema.model.toTicket
+import cinema.model.*
 import org.springframework.stereotype.Service
+import java.util.UUID
+import java.util.concurrent.ConcurrentHashMap
 
 @Service
 class CinemaService {
 
     private val bookedSeats = mutableListOf<Seat>()
     private val availableSeats = mutableListOf<Seat>()
+    private val purchasedTickets = ConcurrentHashMap<String, Ticket>()
 
     init {
         val seatsPerRow = 1..SEATS_PER_ROW
@@ -33,7 +34,7 @@ class CinemaService {
         )
     }
 
-    fun purchaseTicket(row: Int, number: Int): Ticket {
+    fun purchaseTicket(row: Int, number: Int): Purchase {
         if (!isSeatValid(row, number)) {
             throw InvalidSeatException("The number of a row or a column is out of bounds!")
         }
@@ -43,7 +44,22 @@ class CinemaService {
         val seat = findSeat(row, number)!!
         bookedSeats.add(seat)
         availableSeats.remove(seat)
-        return seat.toTicket()
+        val ticket = seat.toTicket()
+        val token = UUID.randomUUID().toString()
+        purchasedTickets[token] = ticket
+        return Purchase(
+            token = token,
+            ticket = ticket,
+        )
+    }
+
+    fun returnTicket(token: String): Return {
+        if (!purchasedTickets.containsKey(token)) {
+            throw InvalidTokenException("Wrong token!")
+        }
+        val returnedTicket = Return(ticket = purchasedTickets[token]!!)
+        purchasedTickets.remove(token)
+        return returnedTicket
     }
 
     private fun isSeatValid(row: Int, number: Int): Boolean {

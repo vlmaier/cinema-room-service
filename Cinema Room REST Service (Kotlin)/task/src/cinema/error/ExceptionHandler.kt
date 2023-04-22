@@ -11,7 +11,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @RestControllerAdvice
 class ExceptionHandler : ResponseEntityExceptionHandler() {
 
-    @ExceptionHandler(UnavailableSeatException::class, InvalidSeatException::class)
+    @ExceptionHandler(UnavailableSeatException::class, InvalidSeatException::class, InvalidTokenException::class)
     fun onInvalidSeatException(e: RuntimeException): ResponseEntity<ErrorInfo> {
         val error = ErrorInfo(
             message = e.message ?: ""

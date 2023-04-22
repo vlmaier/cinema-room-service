@@ -1,8 +1,10 @@
-package cinema
+package cinema.controller
 
+import cinema.model.Purchase
+import cinema.model.Return
 import cinema.model.Room
-import cinema.model.Ticket
 import cinema.model.TicketRequest
+import cinema.model.ReturnRequest
 import cinema.service.CinemaService
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
@@ -21,7 +23,14 @@ class CinemaController(
     @PostMapping("/purchase")
     fun purchaseTicket(
         @RequestBody request: TicketRequest,
-    ): Ticket {
+    ): Purchase {
         return cinemaService.purchaseTicket(request.row, request.number)
+    }
+
+    @PostMapping("/return")
+    fun returnTicket(
+        @RequestBody request: ReturnRequest,
+    ): Return {
+        return cinemaService.returnTicket(request.token)
     }
 }
