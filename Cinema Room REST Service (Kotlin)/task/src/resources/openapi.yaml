@@ -1,0 +1,148 @@
+openapi: "3.0.3"
+info:
+  title: "Cinema Room Service API"
+  description: "Cinema Room Service API"
+  version: "1.0.0"◊
+servers:
+  - url: "localhost"
+paths:
+  /purchase:
+    post:
+      summary: "Purchase ticket"
+      operationId: "purchaseTicket"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TicketRequest"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Purchase"
+  /return:
+    post:
+      summary: "Return ticket"
+      operationId: "returnTicket"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReturnRequest"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Return"
+  /seats:
+    get:
+      summary: "Get available seats"
+      operationId: "getSeats"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Room"
+  /stats:
+    post:
+      summary: "Show stats"
+      operationId: "getStats"
+      parameters:
+        - name: "password"
+          in: "query"
+          required: false
+          schema:
+            type: "string"
+            default: ""
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Stats"
+components:
+  schemas:
+    TicketRequest:
+      type: "object"
+      properties:
+        row:
+          type: "integer"
+          format: "int32"
+        number:
+          type: "integer"
+          format: "int32"
+    Ticket:
+      type: "object"
+      properties:
+        row:
+          type: "integer"
+          format: "int32"
+        number:
+          type: "integer"
+          format: "int32"
+        price:
+          type: "integer"
+          format: "int32"
+    Purchase:
+      type: "object"
+      properties:
+        token:
+          type: "string"
+        ticket:
+          $ref: "#/components/schemas/Ticket"
+    ReturnRequest:
+      type: "object"
+      properties:
+        token:
+          type: "string"
+    Return:
+      type: "object"
+      properties:
+        ticket:
+          $ref: "#/components/schemas/Ticket"
+    Seat:
+      type: "object"
+      properties:
+        row:
+          type: "integer"
+          format: "int32"
+        number:
+          type: "integer"
+          format: "int32"
+        price:
+          type: "integer"
+          format: "int32"
+    Room:
+      type: "object"
+      properties:
+        totalRows:
+          type: "integer"
+          format: "int32"
+        seatsPerRow:
+          type: "integer"
+          format: "int32"
+        availableSeats:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/Seat"
+    Stats:
+      type: "object"
+      properties:
+        income:
+          type: "integer"
+          format: "int32"
+        availableSeats:
+          type: "integer"
+          format: "int32"
+        purchasedTickets:
+          type: "integer"
+          format: "int32"

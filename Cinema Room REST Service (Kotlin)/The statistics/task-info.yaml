@@ -734,6 +734,9 @@ files:
         val purchasedTickets: Int,
     )
   learner_created: true
+- name: src/resources/openapi.yaml
+  visible: true
+  learner_created: true
 feedback_link: https://hyperskill.org/learn/step/20460#comment
 status: Solved
 feedback:
