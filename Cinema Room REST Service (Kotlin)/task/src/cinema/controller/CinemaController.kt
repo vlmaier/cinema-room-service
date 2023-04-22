@@ -1,14 +1,11 @@
 package cinema.controller
 
-import cinema.model.Purchase
-import cinema.model.Return
-import cinema.model.Room
-import cinema.model.TicketRequest
-import cinema.model.ReturnRequest
+import cinema.model.*
 import cinema.service.CinemaService
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
@@ -32,5 +29,12 @@ class CinemaController(
         @RequestBody request: ReturnRequest,
     ): Return {
         return cinemaService.returnTicket(request.token)
+    }
+
+    @PostMapping("/stats")
+    fun getStats(
+        @RequestParam(defaultValue = "") password: String
+    ): Stats {
+        return cinemaService.getStats(password)
     }
 }

@@ -2,6 +2,7 @@ package cinema.service
 
 import cinema.error.InvalidSeatException
 import cinema.error.InvalidTokenException
+import cinema.error.UnauthorizedException
 import cinema.error.UnavailableSeatException
 import cinema.model.*
 import org.springframework.stereotype.Service
@@ -57,9 +58,22 @@ class CinemaService {
         if (!purchasedTickets.containsKey(token)) {
             throw InvalidTokenException("Wrong token!")
         }
-        val returnedTicket = Return(ticket = purchasedTickets[token]!!)
+        val ticket = purchasedTickets[token]!!
         purchasedTickets.remove(token)
-        return returnedTicket
+        bookedSeats.remove(ticket.toSeat())
+        availableSeats.add(ticket.toSeat())
+        return Return(ticket = ticket)
+    }
+
+    fun getStats(password: String): Stats {
+        if (password != SECRET) {
+            throw UnauthorizedException("The password is wrong!")
+        }
+        return Stats(
+            income = bookedSeats.sumOf { it.price },
+            availableSeats = availableSeats.size,
+            purchasedTickets = purchasedTickets.size,
+        )
     }
 
     private fun isSeatValid(row: Int, number: Int): Boolean {
@@ -86,6 +100,7 @@ class CinemaService {
     }
 }
 
+private const val SECRET = "super_secret"
 private const val SEATS_PER_ROW = 9
 private const val TOTAL_ROWS = 9
 private const val LAST_FRONT_ROW = 4

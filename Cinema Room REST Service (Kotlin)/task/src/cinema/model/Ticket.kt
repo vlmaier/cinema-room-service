@@ -8,3 +8,11 @@ data class Ticket(
     val number: Int,
     val price: Int,
 )
+
+fun Ticket.toSeat(): Seat {
+    return Seat(
+        row = row,
+        number = number,
+        price = price,
+    )
+}
