@@ -5,7 +5,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$hs.kotlin.version"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.20"
     }
 }
 
@@ -15,9 +15,8 @@ subprojects {
     apply plugin: 'kotlin'
     apply plugin: 'hyperskill'
 
-    def userJava = Integer.parseInt(JavaVersion.current().getMajorVersion())
-    def hsJava = Integer.parseInt(hs.kotlin.javaVersion)
-    def testJava = Math.max(userJava, hsJava)
+    def userJava = 17
+    def testJava = 17
 
     java.toolchain.languageVersion = JavaLanguageVersion.of(testJava)
 
@@ -36,7 +35,7 @@ subprojects {
     repositories {
         mavenCentral()
         maven { url "https://packages.jetbrains.team/maven/p/hyperskill-hs-test/maven" }
-		maven { url "https://jitpack.io" }
+        maven { url "https://jitpack.io" }
     }
 
     dependencies {

@@ -11,7 +11,7 @@ files:
     @SpringBootApplication
     open class Application
 
-    fun main(args: Array<String>) {
+    fun main() {
         runApplication<Application>(*args)
     }
   learner_created: false
