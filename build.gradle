@@ -39,7 +39,7 @@ subprojects {
     }
 
     dependencies {
-        testImplementation 'com.github.hyperskill:hs-test:release-SNAPSHOT'
+        testImplementation 'com.github.hyperskill:hs-test:11.0.0'
     }
 
     configurations.all {
@@ -64,7 +64,7 @@ subprojects {
 
 project(':util') {
     dependencies {
-        implementation 'com.github.hyperskill:hs-test:release-SNAPSHOT'
+        implementation 'com.github.hyperskill:hs-test:11.0.0'
     }
 }
 
